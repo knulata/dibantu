@@ -125,8 +125,12 @@ export default async function handler(req, res) {
             <input name="whatsappNumber" required placeholder="628123456789">
           </div>
           <div class="form-group">
-            <label>Fonnte Token *</label>
-            <input name="fonnteToken" required placeholder="fonnte-api-token">
+            <label>Phone Number ID *</label>
+            <input name="phoneNumberId" required placeholder="Meta phone_number_id">
+          </div>
+          <div class="form-group">
+            <label>Access Token *</label>
+            <input name="whatsappAccessToken" required placeholder="Meta WhatsApp access token">
           </div>
           <div class="form-group">
             <label>Plan</label>

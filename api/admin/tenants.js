@@ -25,20 +25,22 @@ export default async function handler(req, res) {
 
   // POST — create tenant
   if (method === 'POST') {
-    const { businessName, fonnteToken, whatsappNumber, plan, businessContext } = req.body;
+    const { businessName, phoneNumberId, whatsappAccessToken, whatsappNumber, plan, businessContext } = req.body;
 
-    if (!businessName || !fonnteToken || !whatsappNumber) {
-      return res.status(400).json({ error: 'businessName, fonnteToken, whatsappNumber required' });
+    if (!businessName || !phoneNumberId || !whatsappAccessToken) {
+      return res.status(400).json({ error: 'businessName, phoneNumberId, whatsappAccessToken required' });
     }
 
     const tenant = {
       id: randomUUID(),
       businessName,
-      fonnteToken,
-      whatsappNumber,
+      phoneNumberId,
+      whatsappAccessToken,
+      whatsappNumber: whatsappNumber || '',
       plan: plan || 'starter',
       status: 'active',
       createdAt: new Date().toISOString(),
+      messageCount: 0,
     };
 
     createTenant(tenant);

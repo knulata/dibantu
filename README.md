@@ -1,113 +1,77 @@
-# Dibantu — Multi-Tenant WhatsApp AI Assistant Platform
+# Dibantu — Multi-Tenant WhatsApp AI Assistant
 
-Dibantu is a SaaS platform that lets businesses deploy their own AI-powered WhatsApp assistant. Each tenant gets a personalized chatbot that knows their products, FAQ, and brand voice.
+Dibantu is a multi-tenant WhatsApp AI assistant platform powered by OpenAI and the official **Meta WhatsApp Cloud API** (via 360dialog as BSP).
 
-## Architecture
-
-- **Multi-tenant**: Each business is a "tenant" with its own WhatsApp number, Fonnte token, and business context
-- **Serverless**: Runs on Vercel as serverless functions
-- **AI-powered**: GPT-4o-mini generates contextual replies with conversation memory
-- **Admin dashboard**: Manage tenants via a web interface
+Each tenant gets their own WhatsApp Business number with AI-powered auto-replies configured per business context.
 
 ## Setup
 
-### 1. Clone & Install
+### 1. Meta Business Account & 360dialog
 
-```bash
-git clone https://github.com/mfranceschi/dibantu.git
-cd dibantu
-npm install
+1. Create a [Meta Business Account](https://business.facebook.com/)
+2. Register with [360dialog](https://www.360dialog.com/) as your BSP (Business Solution Provider)
+3. Through 360dialog's hub, connect your WhatsApp Business number
+4. Obtain your **Phone Number ID** and **Access Token** from the 360dialog dashboard (or Meta's WhatsApp Manager)
+
+### 2. Webhook Configuration
+
+In Meta's App Dashboard (or 360dialog), set your webhook URL to:
+
+```
+https://your-domain.vercel.app/api/webhook
 ```
 
-### 2. Environment Variables
+- **Verify Token**: Set the same value as your `WEBHOOK_VERIFY_TOKEN` environment variable
+- **Subscribe to**: `messages` field
 
-Set these in Vercel (or `.env.local` for local dev):
+Meta will send a GET request to verify the webhook, then POST incoming messages.
+
+### 3. Environment Variables
+
+Set these in Vercel (or `.env` for local dev):
 
 | Variable | Description |
 |---|---|
-| `OPENAI_API_KEY` | Your OpenAI API key (shared across tenants) |
-| `ADMIN_API_KEY` | Secret key to access admin endpoints |
+| `OPENAI_API_KEY` | OpenAI API key (shared across tenants) |
+| `ADMIN_API_KEY` | Admin dashboard authentication key |
+| `WEBHOOK_VERIFY_TOKEN` | Any random string for Meta webhook verification |
 
-### 3. Deploy
+### 4. Deploy
 
 ```bash
 npx vercel --yes --prod
 ```
 
-### 4. Add a Tenant
+## Architecture
 
-1. Open the admin dashboard: `https://your-app.vercel.app/api/admin/dashboard?key=YOUR_ADMIN_KEY`
-2. Fill in the business name, WhatsApp number, and Fonnte token
-3. Click "Add Tenant"
-4. Configure the business context via the tenant detail API
+```
+api/webhook.js          — Meta webhook (GET verify + POST messages)
+api/admin/dashboard.js  — Admin dashboard UI
+api/admin/tenants.js    — Tenant CRUD API
+api/admin/tenant/[id].js — Tenant detail API
+lib/whatsapp.js         — Meta Cloud API client (send, template, markAsRead)
+lib/tenant.js           — Tenant resolver (by phoneNumberId)
+lib/db.js               — JSON-file database
+lib/ai.js               — OpenAI reply generation
+lib/context.js          — Business context loader
+data/tenants/           — Per-tenant business.json files
+```
 
-### 5. Configure Business Context
+## Adding a Tenant
+
+Via admin dashboard (`/api/admin/dashboard?key=YOUR_KEY`) or API:
 
 ```bash
-curl -X PUT https://your-app.vercel.app/api/admin/tenant/TENANT_ID \
+curl -X POST https://your-domain.vercel.app/api/admin/tenants \
   -H "Content-Type: application/json" \
   -H "X-Admin-Key: YOUR_ADMIN_KEY" \
-  -d '{"businessContext": { ... }}'
-```
-
-See `data/tenants/example/business.json` for the full schema.
-
-### 6. Set Fonnte Webhook
-
-In your Fonnte dashboard, set the webhook URL to:
-```
-https://your-app.vercel.app/api/webhook
-```
-
-All tenants share the same webhook URL — the system identifies tenants by the `device` field.
-
-## API Endpoints
-
-| Endpoint | Method | Description |
-|---|---|---|
-| `/api/webhook` | POST | Fonnte webhook (incoming messages) |
-| `/api/health` | GET | Health check |
-| `/api/admin/dashboard?key=KEY` | GET | Admin dashboard UI |
-| `/api/admin/tenants` | GET/POST/PUT/DELETE | Tenant CRUD |
-| `/api/admin/tenant/:id` | GET/PUT | Tenant details & business context |
-
-## Business Context Schema
-
-```json
-{
-  "businessName": "Toko ABC",
-  "description": "Description of the business",
-  "tone": "ramah dan profesional",
-  "language": "Bahasa Indonesia",
-  "greeting": "Fallback greeting if AI fails",
-  "operatingHours": { "days": "Senin - Sabtu", "hours": "08:00 - 20:00", "timezone": "WIB" },
-  "products": [{ "name": "...", "price": 100000, "description": "...", "stock": true }],
-  "paymentMethods": ["BCA Transfer", "GoPay"],
-  "faq": [{ "question": "...", "answer": "..." }],
-  "additionalInstructions": "Custom AI instructions"
-}
-```
-
-## File Structure
-
-```
-├── api/
-│   ├── webhook.js          # Fonnte webhook handler
-│   ├── health.js            # Health check
-│   └── admin/
-│       ├── dashboard.js     # Admin dashboard HTML
-│       ├── tenants.js       # Tenant CRUD API
-│       └── tenant/[id].js   # Tenant detail API
-├── lib/
-│   ├── ai.js               # AI reply generation
-│   ├── db.js               # JSON-file database
-│   ├── fonnte.js            # Fonnte API client
-│   ├── tenant.js            # Tenant resolver
-│   └── context.js           # Legacy context loader
-├── data/
-│   └── tenants/example/     # Example business config
-├── index.html               # Landing page
-└── vercel.json              # Vercel routing config
+  -d '{
+    "businessName": "Toko ABC",
+    "phoneNumberId": "123456789",
+    "whatsappAccessToken": "EAAx...",
+    "whatsappNumber": "628123456789",
+    "plan": "starter"
+  }'
 ```
 
 ## License
