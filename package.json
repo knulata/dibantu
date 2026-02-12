@@ -1,0 +1,14 @@
+{
+  "name": "dibantu",
+  "version": "1.0.0",
+  "description": "WhatsApp AI assistant for Indonesian sellers, powered by Fonnte and OpenAI",
+  "type": "module",
+  "scripts": {
+    "dev": "vercel dev",
+    "deploy": "vercel --prod"
+  },
+  "dependencies": {
+    "openai": "^4.73.0"
+  },
+  "license": "MIT"
+}

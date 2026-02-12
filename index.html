@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dibantu — Asisten AI untuk Bisnis Kecilmu</title>
+  <meta name="description" content="Bisnis kecil nggak butuh ribet. Dibantu. Asisten AI yang bantu jualan online, CS otomatis, pantau kompetitor, dan bikin konten.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🤝</text></svg>">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            teal: { 50:'#f0fdfa',100:'#ccfbf1',200:'#99f6e4',300:'#5eead4',400:'#2dd4bf',500:'#14b8a6',600:'#0d9488',700:'#0f766e',800:'#115e59',900:'#134e4a' },
+            warm: { 50:'#fffbeb',100:'#fef3c7',200:'#fde68a',300:'#fcd34d',400:'#fbbf24',500:'#f59e0b' }
+          },
+          fontFamily: { sans: ['Inter','system-ui','sans-serif'] }
+        }
+      }
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    @keyframes fadeUp { from { opacity:0; transform:translateY(30px) } to { opacity:1; transform:translateY(0) } }
+    .fade-up { animation: fadeUp .6s ease-out both }
+    .fade-up-delay { animation: fadeUp .6s ease-out .2s both }
+    .fade-up-delay2 { animation: fadeUp .6s ease-out .4s both }
+    [data-animate] { opacity:0; transform:translateY(30px); transition: opacity .6s ease-out, transform .6s ease-out }
+    [data-animate].visible { opacity:1; transform:translateY(0) }
+    .pricing-card:hover { transform:translateY(-8px); box-shadow:0 20px 60px rgba(0,0,0,.1) }
+    .pricing-card { transition: transform .3s ease, box-shadow .3s ease }
+    .feature-card:hover { transform:translateY(-4px); box-shadow:0 12px 40px rgba(0,0,0,.08) }
+    .feature-card { transition: transform .3s ease, box-shadow .3s ease }
+  </style>
+</head>
+<body class="bg-white text-gray-800 font-sans antialiased">
+
+  <!-- Nav -->
+  <nav class="fixed top-0 w-full bg-white/90 backdrop-blur-md z-50 border-b border-gray-100">
+    <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
+      <a href="#" class="text-2xl font-extrabold text-teal-700">Dibantu<span class="text-warm-400">.</span></a>
+      <div class="hidden md:flex gap-8 text-sm font-medium text-gray-600">
+        <a href="#fitur" class="hover:text-teal-600 transition">Fitur</a>
+        <a href="#harga" class="hover:text-teal-600 transition">Harga</a>
+        <a href="#testimoni" class="hover:text-teal-600 transition">Testimoni</a>
+        <a href="#faq" class="hover:text-teal-600 transition">FAQ</a>
+      </div>
+      <a href="https://wa.me/6281234567890?text=Halo%2C%20saya%20tertarik%20dengan%20Dibantu!" target="_blank" class="bg-teal-600 text-white px-5 py-2.5 rounded-full text-sm font-semibold hover:bg-teal-700 transition shadow-lg shadow-teal-600/20">Hubungi Kami</a>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="pt-32 pb-20 md:pt-44 md:pb-32 bg-gradient-to-br from-teal-50 via-white to-warm-50">
+    <div class="max-w-6xl mx-auto px-4 text-center">
+      <div class="inline-block bg-teal-100 text-teal-700 px-4 py-1.5 rounded-full text-sm font-medium mb-6 fade-up">🚀 Asisten AI untuk UMKM Indonesia</div>
+      <h1 class="text-4xl md:text-6xl lg:text-7xl font-extrabold leading-tight mb-6 fade-up-delay">
+        Bisnis kecil<br>nggak butuh ribet.<br><span class="text-teal-600">Dibantu.</span>
+      </h1>
+      <p class="text-lg md:text-xl text-gray-600 max-w-2xl mx-auto mb-10 fade-up-delay2">
+        Dari balas chat pelanggan sampai pantau kompetitor — semua bisa dibantu AI. Biar kamu fokus jualan, sisanya serahin ke kami.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center fade-up-delay2">
+        <a href="https://wa.me/6281234567890?text=Halo%2C%20saya%20mau%20coba%20Dibantu!" target="_blank" class="bg-teal-600 text-white px-8 py-4 rounded-full text-lg font-semibold hover:bg-teal-700 transition shadow-xl shadow-teal-600/30 flex items-center justify-center gap-2">
+          <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.625.846 5.059 2.284 7.034L.789 23.492a.5.5 0 00.61.609l4.458-1.495A11.952 11.952 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-2.336 0-4.512-.767-6.262-2.064l-.437-.334-2.656.89.89-2.656-.334-.437A9.956 9.956 0 012 12C2 6.486 6.486 2 12 2s10 4.486 10 10-4.486 10-10 10z"/></svg>
+          Mulai Sekarang via WhatsApp
+        </a>
+        <a href="#fitur" class="border-2 border-teal-600 text-teal-700 px-8 py-4 rounded-full text-lg font-semibold hover:bg-teal-50 transition">Lihat Fitur ↓</a>
+      </div>
+      <p class="mt-6 text-sm text-gray-400 fade-up-delay2">Gratis konsultasi awal • Tanpa kontrak • Bisa cancel kapan saja</p>
+    </div>
+  </section>
+
+  <!-- Social Proof Bar -->
+  <section class="py-8 bg-gray-50 border-y border-gray-100">
+    <div class="max-w-6xl mx-auto px-4 flex flex-wrap justify-center items-center gap-8 text-gray-400 text-sm font-medium">
+      <span>Dipercaya 500+ UMKM di Indonesia</span>
+      <span class="hidden sm:inline">•</span>
+      <span>⭐ 4.9/5 Rating</span>
+      <span class="hidden sm:inline">•</span>
+      <span>Tokopedia • Shopee • TikTok Shop</span>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section id="fitur" class="py-20 md:py-28">
+    <div class="max-w-6xl mx-auto px-4">
+      <div class="text-center mb-16" data-animate>
+        <h2 class="text-3xl md:text-4xl font-extrabold mb-4">Semua yang kamu butuhkan,<br><span class="text-teal-600">satu tempat.</span></h2>
+        <p class="text-gray-500 text-lg max-w-xl mx-auto">Nggak perlu hire banyak orang. AI kami siap bantu 24/7.</p>
+      </div>
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="feature-card bg-white border border-gray-100 rounded-2xl p-8" data-animate>
+          <div class="text-4xl mb-4">🤖</div>
+          <h3 class="text-xl font-bold mb-2">AI Customer Service 24/7</h3>
+          <p class="text-gray-500">Auto-reply WhatsApp & Instagram DM. Jawab pertanyaan pelanggan, bahkan tengah malam. Nggak pernah capek, nggak pernah jutek.</p>
+        </div>
+        <div class="feature-card bg-white border border-gray-100 rounded-2xl p-8" data-animate>
+          <div class="text-4xl mb-4">📊</div>
+          <h3 class="text-xl font-bold mb-2">Pantau Kompetitor Otomatis</h3>
+          <p class="text-gray-500">Track harga dan strategi kompetitor di marketplace. Dapat notifikasi kalau ada perubahan. Stay ahead, always.</p>
+        </div>
+        <div class="feature-card bg-white border border-gray-100 rounded-2xl p-8" data-animate>
+          <div class="text-4xl mb-4">✍️</div>
+          <h3 class="text-xl font-bold mb-2">Bikin Konten Otomatis</h3>
+          <p class="text-gray-500">Deskripsi produk, caption social media, sampai gambar — semua di-generate AI. Tinggal edit dikit, langsung posting.</p>
+        </div>
+        <div class="feature-card bg-white border border-gray-100 rounded-2xl p-8" data-animate>
+          <div class="text-4xl mb-4">📋</div>
+          <h3 class="text-xl font-bold mb-2">Smart Admin</h3>
+          <p class="text-gray-500">Rangkuman email, organisasi file, tracking deadline. Admin virtual yang nggak pernah lupa dan selalu rapi.</p>
+        </div>
+        <div class="feature-card bg-white border border-gray-100 rounded-2xl p-8" data-animate>
+          <div class="text-4xl mb-4">🔍</div>
+          <h3 class="text-xl font-bold mb-2">Riset Pasar & Data</h3>
+          <p class="text-gray-500">Trend produk, riset supplier, insight pasar — semua berbasis data. Keputusan bisnis jadi lebih smart.</p>
+        </div>
+        <div class="feature-card bg-white border border-gray-100 rounded-2xl p-8" data-animate>
+          <div class="text-4xl mb-4">📚</div>
+          <h3 class="text-xl font-bold mb-2">Knowledge Base Internal</h3>
+          <p class="text-gray-500">Train AI pakai SOP & info produk kamu. Tim baru bisa onboard lebih cepat. Semua jawaban ada di satu tempat.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works -->
+  <section class="py-20 bg-gradient-to-br from-teal-50 to-white">
+    <div class="max-w-6xl mx-auto px-4">
+      <div class="text-center mb-16" data-animate>
+        <h2 class="text-3xl md:text-4xl font-extrabold mb-4">Gampang banget mulainya</h2>
+        <p class="text-gray-500 text-lg">3 langkah aja, langsung jalan.</p>
+      </div>
+      <div class="grid md:grid-cols-3 gap-8">
+        <div class="text-center" data-animate>
+          <div class="w-16 h-16 bg-teal-600 text-white rounded-2xl flex items-center justify-center text-2xl font-bold mx-auto mb-4">1</div>
+          <h3 class="text-lg font-bold mb-2">Chat via WhatsApp</h3>
+          <p class="text-gray-500">Ceritain bisnis kamu. Kita bantu analisa kebutuhan.</p>
+        </div>
+        <div class="text-center" data-animate>
+          <div class="w-16 h-16 bg-teal-600 text-white rounded-2xl flex items-center justify-center text-2xl font-bold mx-auto mb-4">2</div>
+          <h3 class="text-lg font-bold mb-2">Setup dalam 24 Jam</h3>
+          <p class="text-gray-500">Tim kami setting AI sesuai bisnis kamu. Tinggal tunggu.</p>
+        </div>
+        <div class="text-center" data-animate>
+          <div class="w-16 h-16 bg-teal-600 text-white rounded-2xl flex items-center justify-center text-2xl font-bold mx-auto mb-4">3</div>
+          <h3 class="text-lg font-bold mb-2">Bisnis Auto-Pilot 🚀</h3>
+          <p class="text-gray-500">AI mulai kerja. Kamu fokus scaling bisnis.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pricing -->
+  <section id="harga" class="py-20 md:py-28">
+    <div class="max-w-6xl mx-auto px-4">
+      <div class="text-center mb-16" data-animate>
+        <h2 class="text-3xl md:text-4xl font-extrabold mb-4">Harga yang <span class="text-teal-600">masuk akal</span></h2>
+        <p class="text-gray-500 text-lg max-w-xl mx-auto">Lebih murah dari hire satu karyawan. Lebih produktif dari satu tim.</p>
+      </div>
+      <div class="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+        <!-- Starter -->
+        <div class="pricing-card bg-white border border-gray-200 rounded-2xl p-8" data-animate>
+          <div class="text-sm font-semibold text-teal-600 mb-2">STARTER</div>
+          <div class="text-4xl font-extrabold mb-1">Rp 500k</div>
+          <div class="text-gray-400 text-sm mb-6">/bulan</div>
+          <p class="text-gray-500 text-sm mb-6">Cocok buat yang baru mulai dan mau automasi CS.</p>
+          <ul class="space-y-3 text-sm mb-8">
+            <li class="flex items-start gap-2"><span class="text-teal-500 mt-0.5">✓</span> AI Customer Service 24/7</li>
+            <li class="flex items-start gap-2"><span class="text-teal-500 mt-0.5">✓</span> Basic competitor monitoring</li>
+            <li class="flex items-start gap-2"><span class="text-teal-500 mt-0.5">✓</span> WhatsApp integration</li>
+            <li class="flex items-start gap-2"><span class="text-gray-300 mt-0.5">✗</span><span class="text-gray-400"> Content generation</span></li>
+            <li class="flex items-start gap-2"><span class="text-gray-300 mt-0.5">✗</span><span class="text-gray-400"> Smart admin</span></li>
+          </ul>
+          <a href="https://wa.me/6281234567890?text=Halo%2C%20saya%20tertarik%20paket%20Starter!" target="_blank" class="block text-center border-2 border-teal-600 text-teal-700 px-6 py-3 rounded-full font-semibold hover:bg-teal-50 transition">Pilih Starter</a>
+        </div>
+        <!-- Growth -->
+        <div class="pricing-card bg-teal-600 text-white rounded-2xl p-8 relative scale-105" data-animate>
+          <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-warm-400 text-gray-900 text-xs font-bold px-4 py-1 rounded-full">PALING POPULER ⭐</div>
+          <div class="text-sm font-semibold text-teal-200 mb-2">GROWTH</div>
+          <div class="text-4xl font-extrabold mb-1">Rp 1.5jt</div>
+          <div class="text-teal-200 text-sm mb-6">/bulan</div>
+          <p class="text-teal-100 text-sm mb-6">Buat bisnis yang mau naik level. Semua fitur penting included.</p>
+          <ul class="space-y-3 text-sm mb-8">
+            <li class="flex items-start gap-2"><span class="text-warm-300 mt-0.5">✓</span> Semua di Starter</li>
+            <li class="flex items-start gap-2"><span class="text-warm-300 mt-0.5">✓</span> Content generation (AI)</li>
+            <li class="flex items-start gap-2"><span class="text-warm-300 mt-0.5">✓</span> Smart admin & email</li>
+            <li class="flex items-start gap-2"><span class="text-warm-300 mt-0.5">✓</span> Instagram DM auto-reply</li>
+            <li class="flex items-start gap-2"><span class="text-teal-300 mt-0.5">✗</span><span class="text-teal-300"> Dedicated setup</span></li>
+          </ul>
+          <a href="https://wa.me/6281234567890?text=Halo%2C%20saya%20tertarik%20paket%20Growth!" target="_blank" class="block text-center bg-white text-teal-700 px-6 py-3 rounded-full font-semibold hover:bg-teal-50 transition shadow-lg">Pilih Growth</a>
+        </div>
+        <!-- Pro -->
+        <div class="pricing-card bg-white border border-gray-200 rounded-2xl p-8" data-animate>
+          <div class="text-sm font-semibold text-teal-600 mb-2">PRO</div>
+          <div class="text-4xl font-extrabold mb-1">Rp 3jt</div>
+          <div class="text-gray-400 text-sm mb-6">/bulan</div>
+          <p class="text-gray-500 text-sm mb-6">Full suite untuk bisnis serius. Dedicated support & custom setup.</p>
+          <ul class="space-y-3 text-sm mb-8">
+            <li class="flex items-start gap-2"><span class="text-teal-500 mt-0.5">✓</span> Semua di Growth</li>
+            <li class="flex items-start gap-2"><span class="text-teal-500 mt-0.5">✓</span> Market research & data</li>
+            <li class="flex items-start gap-2"><span class="text-teal-500 mt-0.5">✓</span> Internal knowledge base</li>
+            <li class="flex items-start gap-2"><span class="text-teal-500 mt-0.5">✓</span> Dedicated setup & onboarding</li>
+            <li class="flex items-start gap-2"><span class="text-teal-500 mt-0.5">✓</span> Priority support</li>
+          </ul>
+          <a href="https://wa.me/6281234567890?text=Halo%2C%20saya%20tertarik%20paket%20Pro!" target="_blank" class="block text-center border-2 border-teal-600 text-teal-700 px-6 py-3 rounded-full font-semibold hover:bg-teal-50 transition">Pilih Pro</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials -->
+  <section id="testimoni" class="py-20 bg-gray-50">
+    <div class="max-w-6xl mx-auto px-4">
+      <div class="text-center mb-16" data-animate>
+        <h2 class="text-3xl md:text-4xl font-extrabold mb-4">Kata mereka yang udah <span class="text-teal-600">Dibantu</span></h2>
+      </div>
+      <div class="grid md:grid-cols-3 gap-8">
+        <div class="bg-white rounded-2xl p-8 shadow-sm border border-gray-100" data-animate>
+          <div class="flex gap-1 text-warm-400 mb-4">⭐⭐⭐⭐⭐</div>
+          <p class="text-gray-600 mb-6">"Dulu saya harus balas chat sendiri sampai jam 12 malam. Sekarang AI yang handle, dan conversion rate malah naik 30%!"</p>
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 bg-teal-100 rounded-full flex items-center justify-center text-teal-600 font-bold">R</div>
+            <div><div class="font-semibold text-sm">Rina S.</div><div class="text-xs text-gray-400">Seller Shopee — Fashion</div></div>
+          </div>
+        </div>
+        <div class="bg-white rounded-2xl p-8 shadow-sm border border-gray-100" data-animate>
+          <div class="flex gap-1 text-warm-400 mb-4">⭐⭐⭐⭐⭐</div>
+          <p class="text-gray-600 mb-6">"Content generation-nya gila sih. Deskripsi produk yang biasanya 2 jam, sekarang 5 menit. Dan hasilnya bagus!"</p>
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 bg-warm-100 rounded-full flex items-center justify-center text-warm-500 font-bold">A</div>
+            <div><div class="font-semibold text-sm">Andi P.</div><div class="text-xs text-gray-400">Owner Toko Elektronik — Tokopedia</div></div>
+          </div>
+        </div>
+        <div class="bg-white rounded-2xl p-8 shadow-sm border border-gray-100" data-animate>
+          <div class="flex gap-1 text-warm-400 mb-4">⭐⭐⭐⭐⭐</div>
+          <p class="text-gray-600 mb-6">"Competitor monitoring-nya worth it banget. Saya jadi tau kapan kompetitor turun harga dan bisa react cepat."</p>
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 bg-teal-100 rounded-full flex items-center justify-center text-teal-600 font-bold">D</div>
+            <div><div class="font-semibold text-sm">Dewi L.</div><div class="text-xs text-gray-400">TikTok Shop — Skincare</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq" class="py-20 md:py-28">
+    <div class="max-w-3xl mx-auto px-4">
+      <div class="text-center mb-16" data-animate>
+        <h2 class="text-3xl md:text-4xl font-extrabold mb-4">Frequently Asked Questions</h2>
+        <p class="text-gray-500">Jawaban untuk pertanyaan yang sering ditanyakan.</p>
+      </div>
+      <div class="space-y-4" data-animate>
+        <details class="group bg-white border border-gray-200 rounded-xl">
+          <summary class="flex justify-between items-center cursor-pointer p-6 font-semibold">Apa itu Dibantu? <span class="text-teal-600 group-open:rotate-45 transition-transform text-xl">+</span></summary>
+          <div class="px-6 pb-6 text-gray-500">Dibantu adalah layanan asisten AI yang dirancang khusus untuk UMKM Indonesia. Kami bantu automasi customer service, pembuatan konten, monitoring kompetitor, dan banyak lagi — supaya kamu bisa fokus ke hal yang paling penting: mengembangkan bisnis.</div>
+        </details>
+        <details class="group bg-white border border-gray-200 rounded-xl">
+          <summary class="flex justify-between items-center cursor-pointer p-6 font-semibold">Apakah AI-nya bisa bahasa Indonesia? <span class="text-teal-600 group-open:rotate-45 transition-transform text-xl">+</span></summary>
+          <div class="px-6 pb-6 text-gray-500">Tentu! AI kami dioptimalkan untuk bahasa Indonesia, termasuk bahasa gaul dan slang yang umum dipakai di marketplace dan social media. Pelanggan kamu nggak akan sadar kalau yang balas itu AI 😉</div>
+        </details>
+        <details class="group bg-white border border-gray-200 rounded-xl">
+          <summary class="flex justify-between items-center cursor-pointer p-6 font-semibold">Berapa lama proses setup-nya? <span class="text-teal-600 group-open:rotate-45 transition-transform text-xl">+</span></summary>
+          <div class="px-6 pb-6 text-gray-500">Untuk paket Starter dan Growth, setup bisa selesai dalam 24 jam. Untuk paket Pro dengan custom setup, biasanya 2-3 hari kerja. Selama proses setup, kamu tetap bisa konsultasi dengan tim kami.</div>
+        </details>
+        <details class="group bg-white border border-gray-200 rounded-xl">
+          <summary class="flex justify-between items-center cursor-pointer p-6 font-semibold">Bisa cancel kapan saja? <span class="text-teal-600 group-open:rotate-45 transition-transform text-xl">+</span></summary>
+          <div class="px-6 pb-6 text-gray-500">Bisa! Nggak ada kontrak jangka panjang. Kamu bisa cancel subscription kapan saja. Tapi yakin deh, begitu ngerasain, nggak bakal mau berhenti 😄</div>
+        </details>
+        <details class="group bg-white border border-gray-200 rounded-xl">
+          <summary class="flex justify-between items-center cursor-pointer p-6 font-semibold">Data saya aman nggak? <span class="text-teal-600 group-open:rotate-45 transition-transform text-xl">+</span></summary>
+          <div class="px-6 pb-6 text-gray-500">100% aman. Kami menggunakan enkripsi end-to-end dan server yang berlokasi di Indonesia. Data bisnis kamu nggak akan pernah dibagikan ke pihak ketiga. Privasi adalah prioritas utama kami.</div>
+        </details>
+        <details class="group bg-white border border-gray-200 rounded-xl">
+          <summary class="flex justify-between items-center cursor-pointer p-6 font-semibold">Marketplace apa saja yang didukung? <span class="text-teal-600 group-open:rotate-45 transition-transform text-xl">+</span></summary>
+          <div class="px-6 pb-6 text-gray-500">Saat ini kami support Tokopedia, Shopee, TikTok Shop, Instagram, dan WhatsApp Business. Integrasi dengan platform lain bisa di-request dan biasanya ready dalam 1 minggu.</div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="py-20 bg-teal-600">
+    <div class="max-w-3xl mx-auto px-4 text-center" data-animate>
+      <h2 class="text-3xl md:text-4xl font-extrabold text-white mb-4">Siap dibantu?</h2>
+      <p class="text-teal-100 text-lg mb-8">Mulai gratis, tanpa ribet. Chat kami sekarang dan rasakan bedanya.</p>
+      <a href="https://wa.me/6281234567890?text=Halo%2C%20saya%20mau%20coba%20Dibantu!" target="_blank" class="inline-flex items-center gap-2 bg-white text-teal-700 px-8 py-4 rounded-full text-lg font-semibold hover:bg-teal-50 transition shadow-xl">
+        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.625.846 5.059 2.284 7.034L.789 23.492a.5.5 0 00.61.609l4.458-1.495A11.952 11.952 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-2.336 0-4.512-.767-6.262-2.064l-.437-.334-2.656.89.89-2.656-.334-.437A9.956 9.956 0 012 12C2 6.486 6.486 2 12 2s10 4.486 10 10-4.486 10-10 10z"/></svg>
+        Chat WhatsApp Sekarang
+      </a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="py-12 bg-gray-900 text-gray-400">
+    <div class="max-w-6xl mx-auto px-4">
+      <div class="grid md:grid-cols-4 gap-8 mb-8">
+        <div class="md:col-span-2">
+          <div class="text-2xl font-extrabold text-white mb-3">Dibantu<span class="text-warm-400">.</span></div>
+          <p class="text-sm max-w-sm">Asisten AI untuk UMKM Indonesia. Bisnis kecil nggak butuh ribet — Dibantu.</p>
+        </div>
+        <div>
+          <h4 class="text-white font-semibold mb-3 text-sm">Links</h4>
+          <ul class="space-y-2 text-sm">
+            <li><a href="#fitur" class="hover:text-white transition">Fitur</a></li>
+            <li><a href="#harga" class="hover:text-white transition">Harga</a></li>
+            <li><a href="#testimoni" class="hover:text-white transition">Testimoni</a></li>
+            <li><a href="#faq" class="hover:text-white transition">FAQ</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="text-white font-semibold mb-3 text-sm">Kontak</h4>
+          <ul class="space-y-2 text-sm">
+            <li><a href="https://wa.me/6281234567890" target="_blank" class="hover:text-white transition">WhatsApp</a></li>
+            <li><a href="mailto:halo@dibantu.com" class="hover:text-white transition">halo@dibantu.com</a></li>
+            <li><a href="https://instagram.com/dibantu.id" target="_blank" class="hover:text-white transition">Instagram</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="border-t border-gray-800 pt-8 text-center text-sm">
+        <p>© 2026 Dibantu. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scroll Animation -->
+  <script>
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target) } })
+    }, { threshold: 0.1 });
+    document.querySelectorAll('[data-animate]').forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>
