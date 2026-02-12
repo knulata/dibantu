@@ -1,96 +1,115 @@
-# Dibantu — WhatsApp AI Assistant for Indonesian Sellers
+# Dibantu — Multi-Tenant WhatsApp AI Assistant Platform
 
-**Dibantu** (Indonesian for "helped") is an AI-powered WhatsApp assistant that helps online sellers automate customer conversations. It integrates with [Fonnte](https://fonnte.com) for WhatsApp messaging and uses OpenAI for intelligent, context-aware replies in Bahasa Indonesia.
+Dibantu is a SaaS platform that lets businesses deploy their own AI-powered WhatsApp assistant. Each tenant gets a personalized chatbot that knows their products, FAQ, and brand voice.
 
-## 🚀 Features
+## Architecture
 
-- **Automated WhatsApp replies** — Responds to customer messages 24/7
-- **AI-powered conversations** — Uses GPT to understand intent and generate natural replies
-- **Customizable business context** — Configure your products, FAQs, tone, and operating hours
-- **Bahasa Indonesia first** — All responses are in Indonesian by default
-- **Serverless on Vercel** — Zero infrastructure to manage, scales automatically
-- **Fonnte integration** — Reliable WhatsApp API with easy setup
+- **Multi-tenant**: Each business is a "tenant" with its own WhatsApp number, Fonnte token, and business context
+- **Serverless**: Runs on Vercel as serverless functions
+- **AI-powered**: GPT-4o-mini generates contextual replies with conversation memory
+- **Admin dashboard**: Manage tenants via a web interface
 
-## 📁 Project Structure
-
-```
-dibantu/
-├── api/
-│   ├── webhook.js       # Fonnte webhook handler
-│   └── health.js        # Health check endpoint
-├── lib/
-│   ├── ai.js            # AI response generation (OpenAI)
-│   ├── fonnte.js        # Fonnte API wrapper
-│   └── context.js       # Business context loader
-├── data/
-│   └── business-example.json  # Example business configuration
-├── index.html           # Landing page
-├── vercel.json          # Vercel routing config
-└── package.json
-```
-
-## ⚡ Quick Start
+## Setup
 
 ### 1. Clone & Install
 
 ```bash
-git clone https://github.com/knulata/dibantu.git
+git clone https://github.com/mfranceschi/dibantu.git
 cd dibantu
 npm install
 ```
 
-### 2. Configure Your Business
+### 2. Environment Variables
 
-```bash
-cp data/business-example.json data/business.json
-```
-
-Edit `data/business.json` with your business details — name, products, FAQs, etc.
-
-### 3. Set Environment Variables
-
-Create a `.env` file or set these in your Vercel dashboard:
+Set these in Vercel (or `.env.local` for local dev):
 
 | Variable | Description |
 |---|---|
-| `FONNTE_TOKEN` | Your Fonnte API token |
-| `OPENAI_API_KEY` | OpenAI API key |
-| `WEBHOOK_SECRET` | (Optional) Secret to validate webhook requests |
+| `OPENAI_API_KEY` | Your OpenAI API key (shared across tenants) |
+| `ADMIN_API_KEY` | Secret key to access admin endpoints |
 
-### 4. Deploy to Vercel
+### 3. Deploy
 
 ```bash
-npm i -g vercel
-vercel --prod
+npx vercel --yes --prod
 ```
 
-### 5. Set Webhook in Fonnte
+### 4. Add a Tenant
 
-In your [Fonnte dashboard](https://md.fonnte.com), set the webhook URL to:
+1. Open the admin dashboard: `https://your-app.vercel.app/api/admin/dashboard?key=YOUR_ADMIN_KEY`
+2. Fill in the business name, WhatsApp number, and Fonnte token
+3. Click "Add Tenant"
+4. Configure the business context via the tenant detail API
+
+### 5. Configure Business Context
+
+```bash
+curl -X PUT https://your-app.vercel.app/api/admin/tenant/TENANT_ID \
+  -H "Content-Type: application/json" \
+  -H "X-Admin-Key: YOUR_ADMIN_KEY" \
+  -d '{"businessContext": { ... }}'
+```
+
+See `data/tenants/example/business.json` for the full schema.
+
+### 6. Set Fonnte Webhook
+
+In your Fonnte dashboard, set the webhook URL to:
+```
+https://your-app.vercel.app/api/webhook
+```
+
+All tenants share the same webhook URL — the system identifies tenants by the `device` field.
+
+## API Endpoints
+
+| Endpoint | Method | Description |
+|---|---|---|
+| `/api/webhook` | POST | Fonnte webhook (incoming messages) |
+| `/api/health` | GET | Health check |
+| `/api/admin/dashboard?key=KEY` | GET | Admin dashboard UI |
+| `/api/admin/tenants` | GET/POST/PUT/DELETE | Tenant CRUD |
+| `/api/admin/tenant/:id` | GET/PUT | Tenant details & business context |
+
+## Business Context Schema
+
+```json
+{
+  "businessName": "Toko ABC",
+  "description": "Description of the business",
+  "tone": "ramah dan profesional",
+  "language": "Bahasa Indonesia",
+  "greeting": "Fallback greeting if AI fails",
+  "operatingHours": { "days": "Senin - Sabtu", "hours": "08:00 - 20:00", "timezone": "WIB" },
+  "products": [{ "name": "...", "price": 100000, "description": "...", "stock": true }],
+  "paymentMethods": ["BCA Transfer", "GoPay"],
+  "faq": [{ "question": "...", "answer": "..." }],
+  "additionalInstructions": "Custom AI instructions"
+}
+```
+
+## File Structure
 
 ```
-https://your-domain.vercel.app/api/webhook
+├── api/
+│   ├── webhook.js          # Fonnte webhook handler
+│   ├── health.js            # Health check
+│   └── admin/
+│       ├── dashboard.js     # Admin dashboard HTML
+│       ├── tenants.js       # Tenant CRUD API
+│       └── tenant/[id].js   # Tenant detail API
+├── lib/
+│   ├── ai.js               # AI reply generation
+│   ├── db.js               # JSON-file database
+│   ├── fonnte.js            # Fonnte API client
+│   ├── tenant.js            # Tenant resolver
+│   └── context.js           # Legacy context loader
+├── data/
+│   └── tenants/example/     # Example business config
+├── index.html               # Landing page
+└── vercel.json              # Vercel routing config
 ```
 
-## 🔧 How It Works
-
-1. Customer sends a WhatsApp message
-2. Fonnte forwards it to your `/api/webhook` endpoint
-3. The AI processes the message with your business context
-4. A response is generated and sent back via Fonnte
-5. Customer receives the reply on WhatsApp
-
-## 📝 Customizing the AI
-
-Edit `data/business.json` to control:
-
-- **Business name & description** — So the AI knows who it represents
-- **Products/services** — With names, prices, and descriptions
-- **FAQs** — Common questions and their answers
-- **Tone** — Formal, casual, friendly, etc.
-- **Operating hours** — AI can inform customers when you're available
-- **Greeting & closing messages** — Consistent brand voice
-
-## 📄 License
+## License
 
 MIT

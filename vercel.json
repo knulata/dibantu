@@ -3,6 +3,9 @@
   "routes": [
     { "src": "/api/webhook", "dest": "/api/webhook.js" },
     { "src": "/api/health", "dest": "/api/health.js" },
+    { "src": "/api/admin/dashboard", "dest": "/api/admin/dashboard.js" },
+    { "src": "/api/admin/tenants", "dest": "/api/admin/tenants.js" },
+    { "src": "/api/admin/tenant/(?<id>[^/]+)", "dest": "/api/admin/tenant/[id].js?id=$id" },
     { "src": "/(.*)", "dest": "/index.html" }
   ]
 }

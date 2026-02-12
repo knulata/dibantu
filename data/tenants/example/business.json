@@ -1,0 +1,48 @@
+{
+  "businessName": "Toko Bunga Melati",
+  "description": "Toko bunga online di Jakarta. Menyediakan buket bunga segar untuk berbagai acara.",
+  "tone": "ramah, hangat, dan membantu",
+  "language": "Bahasa Indonesia",
+  "greeting": "Halo! Selamat datang di Toko Bunga Melati 🌸 Ada yang bisa kami bantu?",
+  "operatingHours": {
+    "days": "Senin - Sabtu",
+    "hours": "08:00 - 20:00",
+    "timezone": "WIB"
+  },
+  "products": [
+    {
+      "name": "Buket Mawar Merah",
+      "price": 150000,
+      "description": "12 tangkai mawar merah segar dengan wrapping premium",
+      "stock": true
+    },
+    {
+      "name": "Buket Lily Putih",
+      "price": 200000,
+      "description": "6 tangkai lily putih elegan",
+      "stock": true
+    },
+    {
+      "name": "Rangkaian Meja",
+      "price": 250000,
+      "description": "Rangkaian bunga untuk dekorasi meja, campur warna",
+      "stock": true
+    }
+  ],
+  "paymentMethods": ["BCA Transfer", "GoPay", "OVO", "COD Jakarta"],
+  "faq": [
+    {
+      "question": "Bisa kirim hari ini?",
+      "answer": "Bisa! Untuk pengiriman same-day, pemesanan paling lambat jam 14:00 WIB."
+    },
+    {
+      "question": "Area pengiriman mana saja?",
+      "answer": "Kami melayani pengiriman ke seluruh Jakarta, Depok, Tangerang, dan Bekasi."
+    },
+    {
+      "question": "Bunga tahan berapa lama?",
+      "answer": "Bunga segar kami bisa tahan 5-7 hari jika dirawat dengan baik. Kami sertakan tips perawatan di setiap pesanan."
+    }
+  ],
+  "additionalInstructions": "Selalu tawarkan opsi kartu ucapan gratis untuk setiap pembelian buket."
+}
