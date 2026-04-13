@@ -1,13 +1,14 @@
 {
   "name": "dibantu",
-  "version": "1.0.0",
-  "description": "WhatsApp AI assistant for Indonesian sellers, powered by Fonnte and OpenAI",
+  "version": "2.0.0",
+  "description": "WhatsApp agent for Indonesian regulatory paperwork — BPOM, Kemenkes, LKPP e-Katalog",
   "type": "module",
   "scripts": {
     "dev": "vercel dev",
     "deploy": "vercel --prod"
   },
   "dependencies": {
+    "@upstash/redis": "^1.34.3",
     "openai": "^4.73.0"
   },
   "license": "MIT"
