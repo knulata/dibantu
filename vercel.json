@@ -2,11 +2,13 @@
   "version": 2,
   "routes": [
     { "src": "/api/webhook", "dest": "/api/webhook.js" },
+    { "src": "/api/chat", "dest": "/api/chat.js" },
     { "src": "/api/health", "dest": "/api/health.js" },
     { "src": "/api/admin/dashboard", "dest": "/api/admin/dashboard.js" },
     { "src": "/api/admin/seed", "dest": "/api/admin/seed.js" },
     { "src": "/api/admin/tenants", "dest": "/api/admin/tenants.js" },
     { "src": "/api/admin/tenant/(?<id>[^/]+)", "dest": "/api/admin/tenant/[id].js?id=$id" },
+    { "src": "/chat", "dest": "/chat.html" },
     { "src": "/(.*)", "dest": "/index.html" }
   ]
 }

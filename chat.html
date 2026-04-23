@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dibantu — Dogfood Chat</title>
+  <meta name="robots" content="noindex">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            ink: { 50:'#f6f7fa',100:'#e8ebf2',200:'#cdd3e1',300:'#9aa5bc',400:'#66738e',500:'#3f4c67',600:'#2a3550',700:'#1f2740',800:'#151c30',900:'#0b1020' },
+            sky: { 50:'#f0f9ff',100:'#e0f2fe',200:'#bae6fd',300:'#7dd3fc',400:'#38bdf8',500:'#0ea5e9',600:'#0284c7',700:'#0369a1',800:'#075985',900:'#0c4a6e' }
+          },
+          fontFamily: { sans: ['Inter','system-ui','sans-serif'] }
+        }
+      }
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { background: #f6f7fa; }
+    .bubble-user { background: #0284c7; color: white; border-radius: 18px 18px 4px 18px; }
+    .bubble-bot { background: white; color: #151c30; border-radius: 18px 18px 18px 4px; border: 1px solid #e8ebf2; }
+    .bubble-sys { background: #fff8e1; color: #92400e; border-radius: 12px; font-size: 12px; }
+    .typing-dot::after {
+      content: "...";
+      animation: dotpulse 1.2s infinite;
+    }
+    @keyframes dotpulse { 0% { content: "." } 33% { content: ".." } 66% { content: "..." } }
+    .msg p { margin-bottom: 0.5em; }
+    .msg p:last-child { margin-bottom: 0; }
+    .msg strong { font-weight: 600; }
+    .msg ul { margin: 0.25em 0 0.5em 1.25em; list-style: disc; }
+    .msg li { margin-bottom: 0.15em; }
+    .msg code { background: rgba(0,0,0,0.06); padding: 0.1em 0.3em; border-radius: 4px; font-size: 0.9em; font-family: ui-monospace, SFMono-Regular, monospace; }
+  </style>
+</head>
+<body class="font-sans text-ink-800 h-screen flex flex-col">
+
+  <header class="bg-white border-b border-ink-100 px-4 py-3 flex items-center justify-between shadow-sm">
+    <div class="flex items-center gap-3">
+      <div class="w-9 h-9 rounded-full bg-sky-600 text-white flex items-center justify-center font-bold">D</div>
+      <div>
+        <div class="font-bold text-ink-900">Dibantu <span class="text-xs font-normal text-amber-500 bg-amber-50 px-2 py-0.5 rounded-full ml-1">dogfood</span></div>
+        <div class="text-xs text-ink-400" id="status">ready &middot; BPOM &middot; Kemenkes &middot; LKPP</div>
+      </div>
+    </div>
+    <div class="flex items-center gap-2">
+      <button id="reset-btn" class="text-xs text-ink-500 hover:text-sky-600 px-3 py-1.5 rounded-full hover:bg-ink-50">&#8635; Reset</button>
+      <a href="/api/admin/dashboard" class="text-xs text-ink-500 hover:text-sky-600 px-3 py-1.5 rounded-full hover:bg-ink-50" title="Review drafts">Drafts</a>
+    </div>
+  </header>
+
+  <main id="messages" class="flex-1 overflow-y-auto px-4 py-6 space-y-3 max-w-3xl w-full mx-auto">
+    <div class="bubble-sys px-4 py-2 mx-auto text-center max-w-md">
+      Dogfood chat untuk menguji agent tanpa WhatsApp. Sesi persisten per-browser. Drafts masuk ke Upstash Redis.
+    </div>
+  </main>
+
+  <footer class="bg-white border-t border-ink-100 p-3">
+    <form id="chat-form" class="max-w-3xl w-full mx-auto flex gap-2">
+      <input
+        id="msg-input"
+        type="text"
+        autocomplete="off"
+        placeholder="Tulis pesan..."
+        class="flex-1 px-4 py-3 bg-ink-50 border border-ink-100 rounded-full focus:outline-none focus:border-sky-400 focus:bg-white transition text-sm"
+      />
+      <button
+        type="submit"
+        id="send-btn"
+        class="bg-sky-600 text-white px-5 py-3 rounded-full font-semibold hover:bg-sky-700 transition shadow disabled:opacity-50 disabled:cursor-not-allowed text-sm"
+      >Kirim</button>
+    </form>
+    <p class="text-center text-[10px] text-ink-400 mt-2">Ada key? Append <code>?key=XXX</code> ke URL sekali &mdash; tersimpan di localStorage.</p>
+  </footer>
+
+  <script>
+    const messagesEl = document.getElementById("messages");
+    const form = document.getElementById("chat-form");
+    const input = document.getElementById("msg-input");
+    const sendBtn = document.getElementById("send-btn");
+    const resetBtn = document.getElementById("reset-btn");
+    const statusEl = document.getElementById("status");
+
+    const urlKey = new URLSearchParams(location.search).get("key");
+    if (urlKey) {
+      localStorage.setItem("dibantu_dogfood_key", urlKey);
+      history.replaceState({}, "", location.pathname);
+    }
+    const DOGFOOD_KEY = localStorage.getItem("dibantu_dogfood_key") || "";
+
+    let SENDER = localStorage.getItem("dibantu_dogfood_sender");
+    if (!SENDER) {
+      SENDER = "web-" + Math.random().toString(36).slice(2, 10);
+      localStorage.setItem("dibantu_dogfood_sender", SENDER);
+    }
+
+    function appendInlineFormatted(parent, text) {
+      const re = /(\*\*[^*\n]+\*\*|\*[^*\n]+\*|`[^`\n]+`)/g;
+      let lastIdx = 0;
+      let match;
+      while ((match = re.exec(text)) !== null) {
+        if (match.index > lastIdx) {
+          parent.appendChild(document.createTextNode(text.slice(lastIdx, match.index)));
+        }
+        const chunk = match[0];
+        let el;
+        let inner;
+        if (chunk.startsWith("**")) { el = document.createElement("strong"); inner = chunk.slice(2, -2); }
+        else if (chunk.startsWith("*")) { el = document.createElement("strong"); inner = chunk.slice(1, -1); }
+        else { el = document.createElement("code"); inner = chunk.slice(1, -1); }
+        el.textContent = inner;
+        parent.appendChild(el);
+        lastIdx = match.index + chunk.length;
+      }
+      if (lastIdx < text.length) {
+        parent.appendChild(document.createTextNode(text.slice(lastIdx)));
+      }
+    }
+
+    function renderFormattedInto(container, text) {
+      const lines = text.split("\n");
+      let currentList = null;
+      for (const line of lines) {
+        const bulletMatch = line.match(/^\s*[-•]\s+(.*)$/);
+        if (bulletMatch) {
+          if (!currentList) {
+            currentList = document.createElement("ul");
+            container.appendChild(currentList);
+          }
+          const li = document.createElement("li");
+          appendInlineFormatted(li, bulletMatch[1]);
+          currentList.appendChild(li);
+        } else {
+          currentList = null;
+          if (line.trim()) {
+            const p = document.createElement("p");
+            appendInlineFormatted(p, line);
+            container.appendChild(p);
+          }
+        }
+      }
+    }
+
+    function addBubble(role, text, meta) {
+      const wrap = document.createElement("div");
+      wrap.className = "flex " + (role === "user" ? "justify-end" : "justify-start");
+      const bubble = document.createElement("div");
+      bubble.className = (role === "user" ? "bubble-user" : "bubble-bot") + " px-4 py-3 max-w-[85%] shadow-sm msg";
+      renderFormattedInto(bubble, text);
+      if (meta) {
+        const m = document.createElement("div");
+        m.className = "text-[10px] opacity-70 mt-2 pt-2 border-t border-current/10";
+        m.textContent = meta;
+        bubble.appendChild(m);
+      }
+      wrap.appendChild(bubble);
+      messagesEl.appendChild(wrap);
+      messagesEl.scrollTop = messagesEl.scrollHeight;
+      return wrap;
+    }
+
+    function addTyping() {
+      const wrap = document.createElement("div");
+      wrap.className = "flex justify-start";
+      wrap.id = "typing-indicator";
+      const b = document.createElement("div");
+      b.className = "bubble-bot px-4 py-3 shadow-sm text-ink-400 typing-dot text-sm";
+      wrap.appendChild(b);
+      messagesEl.appendChild(wrap);
+      messagesEl.scrollTop = messagesEl.scrollHeight;
+    }
+    function removeTyping() {
+      const t = document.getElementById("typing-indicator");
+      if (t) t.remove();
+    }
+
+    addBubble("bot",
+      "Halo! Saya **Dibantu**, asisten kamu buat urus izin BPOM, Kemenkes & e-Katalog LKPP. Mau bantu apa hari ini?\n\nCoba tulis: *mau perpanjang izin BPOM obat tradisional*"
+    );
+
+    async function send(message, opts) {
+      const reset = opts && opts.reset;
+      sendBtn.disabled = true;
+      input.disabled = true;
+      if (!reset) addTyping();
+      try {
+        const res = await fetch("/api/chat", {
+          method: "POST",
+          headers: Object.assign(
+            { "Content-Type": "application/json" },
+            DOGFOOD_KEY ? { "X-Dogfood-Key": DOGFOOD_KEY } : {}
+          ),
+          body: JSON.stringify({ message: message, sender: SENDER, reset: reset }),
+        });
+        removeTyping();
+        let data = {};
+        try { data = await res.json(); } catch (e) {}
+        if (!res.ok) {
+          addBubble("bot", "⚠️ " + (data.error || "request gagal (" + res.status + ")"));
+          return;
+        }
+        const meta = [];
+        if (data.activeSkill) meta.push("skill: " + data.activeSkill);
+        if (data.bpomMode) meta.push("mode: " + data.bpomMode);
+        if (data.draftId) meta.push("draft: " + data.draftId + " → pending QS review");
+        addBubble("bot", data.reply, meta.length ? meta.join(" · ") : null);
+        if (data.activeSkill || data.bpomMode) {
+          statusEl.textContent = [data.activeSkill || "ready", data.bpomMode].filter(Boolean).join(" · ");
+        }
+      } catch (err) {
+        removeTyping();
+        addBubble("bot", "⚠️ error: " + err.message);
+      } finally {
+        sendBtn.disabled = false;
+        input.disabled = false;
+        input.focus();
+      }
+    }
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      const text = input.value.trim();
+      if (!text) return;
+      addBubble("user", text);
+      input.value = "";
+      send(text);
+    });
+
+    resetBtn.addEventListener("click", async function () {
+      if (!confirm("Reset percakapan?")) return;
+      await send(null, { reset: true });
+      while (messagesEl.children.length > 1) messagesEl.removeChild(messagesEl.lastChild);
+      statusEl.textContent = "ready · BPOM · Kemenkes · LKPP";
+      addBubble("bot", "Halo! Siap mulai lagi. Mau bantu apa?");
+    });
+
+    input.focus();
+  </script>
+</body>
+</html>
